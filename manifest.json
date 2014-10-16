@@ -1,0 +1,15 @@
+{
+    "architecture": "all",
+    "description": "a clean and basic calorie tracker",
+    "framework": "ubuntu-sdk-14.10-dev2",
+    "hooks": {
+        "Plates": {
+            "apparmor": "Plates.apparmor",
+            "desktop": "Plates.desktop"
+        }
+    },
+    "maintainer": "Kevin Feyder <kevinfeyder@gmail.com>",
+    "name": "com.ubuntu.developer.kevinfeyder.plates",
+    "title": "Plates",
+    "version": "0.3"
+}
