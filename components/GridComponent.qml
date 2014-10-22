@@ -4,14 +4,18 @@ import U1db 1.0 as U1db
 import "../components/"
 
 
+Rectangle{
+    anchors.fill: parent
+    color: "#e8e4e9"
+
 
 Grid {
-    width:parent.width-units.gu(.6)
+    width:parent.width//-units.gu(.6)
     anchors{
-        margins:units.gu(2)
-        horizontalCenter: parent.horizontalCenter
-        verticalCenter: parent.verticalCenter
-        //fill: parent
+        margins:units.gu(1)
+        //horizontalCenter: parent.horizontalCenter
+        //verticalCenter: parent.verticalCenter
+        fill: parent
     }
     columns: 2
     columnSpacing: units.gu(.185)
@@ -20,7 +24,7 @@ Grid {
     //first row protein and dairy
 
     Rectangle {
-        height:units.gu(16)
+        height:parent.height*.33//units.gu(16)
         width:(parent.width*.5)
         color:"#f1f1f1"
         Column{
@@ -49,7 +53,7 @@ Grid {
         }
     }
     Rectangle {
-        height:units.gu(16)
+        height:parent.height*.33//units.gu(16)
         width:(parent.width*.5)-units.gu(.3)
         color:"#f1f1f1"
         Column{
@@ -80,7 +84,7 @@ Grid {
     }
     //middle row in grid Fruits and vegetables
     Rectangle {
-        height:units.gu(16)
+        height:parent.height*.33//units.gu(16)
         width:(parent.width*.5)
         color:"#f1f1f1"
         Column{
@@ -109,7 +113,7 @@ Grid {
         }
     }
     Rectangle {
-        height:units.gu(16)
+        height:parent.height*.33//units.gu(16)
         width:(parent.width*.5)-units.gu(.3)
         color:"#f1f1f1"
         Column{
@@ -139,7 +143,7 @@ Grid {
     }
     //Last row of grid Grains and sweets
     Rectangle {
-        height:units.gu(16)
+        height:parent.height*.33//units.gu(16)
         width:(parent.width*.5)
         color:"#f1f1f1"
         Column{
@@ -168,11 +172,11 @@ Grid {
         }
     }
     Rectangle {
-        height:units.gu(16)
+        height:parent.height*.33//units.gu(16)
         width:(parent.width*.5)-units.gu(.2)
         color:"#f1f1f1"
         Column{
-            anchors{horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter}
+            anchors{centerIn: parent}
             spacing:units.gu(1.3)
             Label{
                 id:sweetLorem
@@ -196,4 +200,5 @@ Grid {
             opacity: 0.1
         }
     }
+}
 }

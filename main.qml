@@ -7,7 +7,6 @@ import "components"
 
 MainView {
     objectName: "mainView"
-
     // Note! applicationName needs to match the "name" field of the click manifest
     applicationName: "com.ubuntu.developer.kevinfeyder.plates"
     useDeprecatedToolbar: false
@@ -84,7 +83,7 @@ MainView {
                     EmptyComponent {
                         id:empty
                         visible:true
-                        z:3
+                        z:2
                         MouseArea{
                             anchors.fill:parent
                             onClicked:stack.push(entry)
@@ -176,6 +175,14 @@ MainView {
                     height:parent.height
                     width:parent.width
                     anchors.top:head.bottom
+                }
+
+                PageWithBottomEdge{
+                    bottomEdgeTitle: i18n.tr("Nutrition Details")
+                    height:parent.height-units.gu(19)
+                    //bottomEdgeEnabled: (layouts.width < units.gu(60)) ? true : false;
+                    z:3
+                    bottomEdgePageComponent: GridComponent{anchors.fill:parent;anchors.centerIn: parent}
                 }
         }
 
@@ -356,9 +363,10 @@ UbuntuShape{
                 }//end of column
         }
         }//end of page
+
     }//end of pagestack
 
-        Panel {
+        /*Panel {
                 id: panel
                 anchors {
                     bottom: parent.bottom
@@ -370,5 +378,5 @@ UbuntuShape{
                     anchors.fill:parent
                     GridComponent{}
                 }
-            }
+            }*/
 }

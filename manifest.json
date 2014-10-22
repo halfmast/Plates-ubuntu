@@ -1,7 +1,7 @@
 {
     "architecture": "all",
     "description": "a clean and basic calorie tracker",
-    "framework": "ubuntu-sdk-14.10-dev2",
+    "framework": "ubuntu-sdk-14.04-qml",
     "hooks": {
         "Plates": {
             "apparmor": "Plates.apparmor",
