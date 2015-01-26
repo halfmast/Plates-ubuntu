@@ -190,6 +190,16 @@ MainView {
             id:entry
             visible: false
             title:"New Item"
+            head.backAction: Action {
+                    iconName: "close"
+                    onTriggered: {
+                        stack.pop(home)
+                    }
+                }
+            head.actions: Action{
+                        iconName: "ok"
+                        text: i18n.tr("Save")
+            }
                         tools: ToolbarItems {
                 ToolbarButton {
                     action: Action {
