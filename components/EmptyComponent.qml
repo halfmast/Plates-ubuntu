@@ -1,41 +1,44 @@
 import QtQuick 2.0
 import Ubuntu.Components 1.1
-import U1db 1.0 as U1db
-import Ubuntu.Components.Popups 1.0
-import "../components/"
+
 
 Item{
     width:emptyCol.width
     height:units.gu(20)
     anchors.top:head.bottom
-    anchors.topMargin: units.gu(15)
-    anchors.horizontalCenter: parent.horizontalCenter
-    //anchors.verticalCenter: parent.verticalCenter
-    //anchors.margins: parent.width/2
+    anchors.centerIn: parent;
+
     Column{
         id:emptyCol
         width:units.gu(20)
-        height:emptyImg.height + emptyText.height + units.gu(4)
+        height:emptyImg.height + emptyText.height;
         anchors{
-            horizontalCenter: parent.horizontalCenter
-            verticalCenter: parent.verticalCenter
-            margins: units.gu(4)
+            centerIn: parent;
         }
         spacing:units.gu(3)
 
         Image{
             id:emptyImg
-            width:units.gu(20)
-            height:units.gu(20)
-            source: Qt.resolvedUrl("../graphics/iconplatedark.png")
-
+            width:units.gu(25)
+            height:units.gu(25)
+            fillMode: Image.PreserveAspectFit
+            anchors.horizontalCenter: parent.horizontalCenter;
+            source: Qt.resolvedUrl("../graphics/tinydrool.png")
         }
 
         Label{
             id:emptyText
-            font.pixelSize: units.gu(2.5)
+            fontSize:"x-large"
             font.weight: Font.Light;
-            text:"Fill an empty plate"
+            text:"Don't forget to eat?"
+            anchors.horizontalCenter: parent.horizontalCenter;
+        }
+        Label{
+            id:emptyInstruction
+            fontSize: "small"
+            text:"Tap the '+' button to get started"
+            anchors.horizontalCenter: parent.horizontalCenter;
+            horizontalAlignment: Text.AlignHCenter;
         }
     }
 }

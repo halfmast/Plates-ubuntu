@@ -10,8 +10,7 @@ MainView {
     // Note! applicationName needs to match the "name" field of the click manifest
     applicationName: "com.ubuntu.developer.kevinfeyder.plates"
     useDeprecatedToolbar: false
-
-    width: units.gu(100)
+    width: units.gu(45)
     height: units.gu(75)
     backgroundColor: "#f4f4f3"
 
@@ -30,45 +29,46 @@ MainView {
             id:home
 
             U1db.Database {
-                id:mathstuff;
-                path: "math.u1db"
+            id:mathstuff;
+            path: "math.u1db"
             }
             U1db.Document {
-              id: today_doc
-              //holds the date used in the check date function
-              database: mathstuff
-              docId: "save_date"
-              create: true
-              defaults: { "today": 0 }
-              Component.onCompleted: { today_doc.contents.today }
-                            }
-            U1db.Document {
-              id: total
-              //set is the target calorie goal you set
-              //final is your running comsumed total
-              database: mathstuff
-              docId: "total_save"
-              create: true
-              defaults: { "set": 2500, "final": 0 }
+            id: today_doc
+            //holds the date used in the check date function
+            database: mathstuff
+            docId: "save_date"
+            create: true
+            defaults: { "today": 0 }
+            Component.onCompleted: { today_doc.contents.today }
             }
             U1db.Document {
-              id: details
-              //set is the target calorie goal you set
-              //final is your running comsumed total
-              database: mathstuff
-              docId: "details_save"
-              create: true
-              defaults: { "meat": 0, "dairy": 0, "fruits": 0, "veg": 0, "grains": 0, "sweet": 0 }
+            id: total
+            //set is the target calorie goal you set
+            //final is your running comsumed total
+            database: mathstuff
+            docId: "total_save"
+            create: true
+            defaults: { "set": 2500, "final": 0 }
             }
             U1db.Document {
-              id: numbers
-              //last is...I don't remember
-              //cot is a counter that used in the speed up the delete fuction.
-              database: mathstuff
-              docId: "deletedItems"
-              create: true
-              defaults: { "last": 0, "cot": 0 }
+            id: details
+            //set is the target calorie goal you set
+            //final is your running comsumed total
+            database: mathstuff
+            docId: "details_save"
+            create: true
+            defaults: { "meat": 0, "dairy": 0, "fruits": 0, "veg": 0, "grains": 0, "sweet": 0 }
             }
+            U1db.Document {
+            id: numbers
+            //last is...I don't remember
+            //cot is a counter that used in the speed up the delete fuction.
+            database: mathstuff
+            docId: "deletedItems"
+            create: true
+            defaults: { "last": 0, "cot": 0 }
+            }
+
             HeadComponent {
                 //custom header, progressbar and info label
                 id:head
@@ -199,13 +199,6 @@ MainView {
             head.actions: Action{
                         iconName: "ok"
                         text: i18n.tr("Save")
-            }
-                        tools: ToolbarItems {
-                ToolbarButton {
-                    action: Action {
-                        text: "new item"
-                        iconSource: Qt.resolvedUrl("save.svg")
-                        iconName: "add"
                         onTriggered: {liststuff.input = amount.text; liststuff.add = liststuff.input + liststuff.add;
                             //first saves text in u1db documents
                             total.contents = {set: total.contents.set, final: total.contents.final + liststuff.input};
@@ -236,8 +229,8 @@ MainView {
                             //check for empty state button
                             check.emptyState()
                             stack.pop(home)}
-                    }
-                }
+
+
             }
                         Flickable{
                             width:parent.width
