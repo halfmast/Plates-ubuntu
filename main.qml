@@ -7,19 +7,18 @@ import "components"
 
 MainView {
     objectName: "mainView"
-    // Note! applicationName needs to match the "name" field of the click manifest
     applicationName: "com.ubuntu.developer.kevinfeyder.plates"
     useDeprecatedToolbar: false
     width: units.gu(45)
     height: units.gu(75)
     backgroundColor: "#f4f4f3"
 
-    Item { id:start;
+    /*Item { id:start;
         function startupFunction(){
             check.day()
             check.emptyState()
          }
-         Component.onCompleted: startupFunction()}
+         Component.onCompleted: startupFunction()}*/
 
     PageStack {
         id: stack
@@ -28,45 +27,74 @@ MainView {
         Page {
             id:home
 
+            ///---- user settings ---//
             U1db.Database {
-            id:mathstuff;
-            path: "math.u1db"
+                id:food;
+                path: "food.u1db"
             }
             U1db.Document {
-            id: today_doc
-            //holds the date used in the check date function
-            database: mathstuff
-            docId: "save_date"
-            create: true
-            defaults: { "today": 0 }
-            Component.onCompleted: { today_doc.contents.today }
+                id: today_doc
+                //holds the date used in the check date function
+                database: food
+                docId: "save_date"
+                create: true
+                defaults: { "today": 0 }
+                Component.onCompleted: { today_doc.contents.today }
             }
             U1db.Document {
-            id: total
-            //set is the target calorie goal you set
-            //final is your running comsumed total
-            database: mathstuff
-            docId: "total_save"
-            create: true
-            defaults: { "set": 2500, "final": 0 }
+                id: total
+                //set is the target calorie goal you set
+                //final is your running comsumed total
+                database: food
+                docId: "total_save"
+                create: true
+                defaults: { "set": 2500, "final": 0 }
+            }
+
+            //--- food list database ---//
+            U1db.Database {
+                id: playerDB
+                path: "playerDB.u1db"
             }
             U1db.Document {
-            id: details
-            //set is the target calorie goal you set
-            //final is your running comsumed total
-            database: mathstuff
-            docId: "details_save"
-            create: true
-            defaults: { "meat": 0, "dairy": 0, "fruits": 0, "veg": 0, "grains": 0, "sweet": 0 }
+                docId: "playerInfo"
+                id: playerInfo
+                database: playerDB
+                create: true
+                defaults: {
+                    "players": []
+                }
             }
-            U1db.Document {
-            id: numbers
-            //last is...I don't remember
-            //cot is a counter that used in the speed up the delete fuction.
-            database: mathstuff
-            docId: "deletedItems"
-            create: true
-            defaults: { "last": 0, "cot": 0 }
+
+            //--- food list functions ---//
+
+            Item{
+                id:serve
+                function storePlayer(playerObject) {
+                var tempContents = {};
+                   tempContents = playerInfo.contents;
+                if (tempContents.players.indexOf(playerObject) != -1) throw "Already exists";
+                tempContents.players.push(playerObject);
+                playerInfo.contents = tempContents;
+                }
+
+                function deleteItem(player,calorie) {
+                    console.log("final:" + total.contents.final)
+                    console.log("calorie:" + calorie)
+                    console.log("math:" + (total.contents.final - parseInt(calorie)))
+                    var tempContents = {};
+                    tempContents = playerInfo.contents;
+                    var index = tempContents.players.indexOf(player);
+                    total.contents = {set: total.contents.set, final: total.contents.final - parseInt(calorie) };
+                    if(total.contents.final < 0){total.contents = {set: total.contents.set, final: 0 }};
+                    tempContents.players.splice(0, 1);
+                    playerInfo.contents = tempContents;
+                }
+
+                function emptyState(){
+                    if(total.contents.final < 1){empty.visible = true}
+                       else {empty.visible = false}
+                }
             }
 
             HeadComponent {
@@ -82,7 +110,7 @@ MainView {
 
                     EmptyComponent {
                         id:empty
-                        visible:true
+                        visible: total.contents.final === 0? true:false;
                         z:2
                         MouseArea{
                             anchors.fill:parent
@@ -90,14 +118,14 @@ MainView {
                         }
                     }
 
-            Item {//timer that runs check.day functions
+            /*Item {//timer that runs check.day functions
                 Timer {
                     interval: 500; running: true; repeat: true
                     onTriggered:{check.day();}
                 }
-            }
+            }*/
 
-                 Item{
+                 /*Item{
                  id: check
                  //get date then
                  //check date and resets app if date doesn't match
@@ -122,54 +150,13 @@ MainView {
                          meatLorem.text="0%";dairyLorem.text="0%";fruitsLorem.text="0%";vegLorem.text="0%";grainLorem.text="0%";sweetLorem.text="0%";
                          check.emptyState()
                      }
-                         }
-                 function emptyState(){
-                     if(numbers.contents.cot < 1){empty.visible = true}
-                        else {empty.visible = false}
-                 }
-                 }
+                         }*/
 
-                Item {
-                    id:liststuff
-                    //credits go to verzegnassi stefano creator of the quick memo app. Check it out at http://bazaar.launchpad.net/~verzegnassi-stefano/quick-memo/trunk/files
-                    function deleted(indexes) {
-                        var deletedItemNumber = 0;
-                        for (var i=0; i<numbers.contents.cot; i++) {
-                            foodItem1.deleteDoc(plate2.get(indexes[i] - deletedItemNumber).docId)
-                            deletedItemNumber++
-                            numbers.contents = {cot: numbers.contents.cot, last: numbers.contents.last + 1};
-                         }
-                    }
-                function adddoc() {
-                    foodItem1.putDoc(JSON.stringify({foods: {name: name.text ,cal:amount.text }}))
-                }
-                property int add: 0;
-                property int input: 0;
-                }
-                U1db.Database {
-                    id:foodItem1;
-                    path: "foodItem1.u1db"
-                }
-                SortFilterModel {
-                    id: plate2
-                    sort {
-                        //this doesn't work but it should sort the food list
-                        //should it be name or foods.name
-                        //property: "foods.name"
-                        property: "foods.name"
-                        order: Qt.DescendingOrder
-                    }
-                    //filter.property: "cal"
-                    model: U1db.Query {
-                            id: eatables1
-                            index: U1db.Index {
-                                //id:indexes
-                                database:foodItem1
-                                expression: ["foods.name","foods.cal"]
-                            }
-                            query: ["*", "*"]
-                        }
-                }
+
+
+
+
+
                 ListComponent {
                     id:listObject
                     height:parent.height
@@ -177,13 +164,13 @@ MainView {
                     anchors.top:head.bottom
                 }
 
-                PageWithBottomEdge{
+                /*PageWithBottomEdge{
                     bottomEdgeTitle: i18n.tr("Nutrition Details")
                     height:parent.height-units.gu(19)
                     //bottomEdgeEnabled: (layouts.width < units.gu(60)) ? true : false;
                     z:3
                     bottomEdgePageComponent: GridComponent{anchors.fill:parent;anchors.centerIn: parent}
-                }
+                }*/
         }
 
         Page {
@@ -199,36 +186,16 @@ MainView {
             head.actions: Action{
                         iconName: "ok"
                         text: i18n.tr("Save")
-                        onTriggered: {liststuff.input = amount.text; liststuff.add = liststuff.input + liststuff.add;
+                        onTriggered: {
+                            //liststuff.input = amount.text; liststuff.add = liststuff.input + liststuff.add;
                             //first saves text in u1db documents
-                            total.contents = {set: total.contents.set, final: total.contents.final + liststuff.input};
-                            //add count to the counter for the delete function
-                            numbers.contents = {cot: numbers.contents.cot + 1, last: total.contents.set - total.contents.final};
-                            //second takes inputed text and adds it to the list
-                            liststuff.adddoc();
-                            //saves the different food groups
-                            if (proteinSwitch.checked === true){details.contents = {meat: details.contents.meat + 1, dairy: details.contents.dairy, fruits: details.contents.fruits, veg: details.contents.veg, sweet: details.contents.sweet, grains: details.contents.grains }}
-                                else{details.contents = {meat: details.contents.meat, dairy: details.contents.dairy, fruits: details.contents.fruits, veg: details.contents.veg, sweet: details.contents.sweet, grains: details.contents.grains }};
-
-                            if (dairySwitch.checked === true){details.contents = {meat: details.contents.meat, dairy: details.contents.dairy + 1, fruits: details.contents.fruits, veg: details.contents.veg,sweet: details.contents.sweet,grains: details.contents.grains }}
-                                else{details.contents = {meat: details.contents.meat, dairy: details.contents.dairy, fruits: details.contents.fruits, veg: details.contents.veg, sweet: details.contents.sweet, grains: details.contents.grains }};
-
-                            if (fruitsSwitch.checked === true){details.contents = {meat: details.contents.meat,dairy: details.contents.dairy,fruits: details.contents.fruits + 1,veg: details.contents.veg,sweet: details.contents.sweet,grains: details.contents.grains }}
-                                else{details.contents = {meat: details.contents.meat, dairy: details.contents.dairy, fruits: details.contents.fruits, veg: details.contents.veg, sweet: details.contents.sweet, grains: details.contents.grains }};
-
-                            if (vegSwitch.checked === true){details.contents = {meat: details.contents.meat,dairy: details.contents.dairy,fruits: details.contents.fruits,veg: details.contents.veg + 1,sweet: details.contents.sweet,grains: details.contents.grains }}
-                                else{details.contents = {meat: details.contents.meat, dairy: details.contents.dairy, fruits: details.contents.fruits, veg: details.contents.veg, sweet: details.contents.sweet, grains: details.contents.grains }};
-
-                            if (sweetSwitch.checked === true){details.contents = {meat: details.contents.meat,dairy: details.contents.dairy,fruits: details.contents.fruits,veg: details.contents.veg,sweet: details.contents.sweet + 1,grains: details.contents.grains }}
-                                else{details.contents = {meat: details.contents.meat, dairy: details.contents.dairy, fruits: details.contents.fruits, veg: details.contents.veg, sweet: details.contents.sweet, grains: details.contents.grains }};
-
-                            if (grainSwitch.checked === true){details.contents = {meat: details.contents.meat,dairy: details.contents.dairy,fruits: details.contents.fruits,veg: details.contents.veg,sweet: details.contents.sweet,grains: details.contents.grains + 1 }}
-                                else{details.contents = {meat: details.contents.meat, dairy: details.contents.dairy, fruits: details.contents.fruits, veg: details.contents.veg, sweet: details.contents.sweet, grains: details.contents.grains }};
-                            //reset toggles to false
-                            proteinSwitch.checked = false; dairySwitch.checked = false; fruitsSwitch.checked = false; vegSwitch.checked =false; sweetSwitch.checked = false; grainSwitch.checked = false;
+                            total.contents = {set: total.contents.set, final: total.contents.final + parseInt(amount.text)};
+                            serve.storePlayer({"foodName":name.text, "calorieCount":amount.text});
                             //check for empty state button
-                            check.emptyState()
-                            stack.pop(home)}
+                            serve.emptyState()
+                            stack.pop(home)
+                            console.log(total.contents.final)
+                        }
 
 
             }
@@ -261,12 +228,27 @@ MainView {
                     placeholderText: "426"
                     inputMethodHints: Qt.ImhDigitsOnly
                 }
-                Label {
+                /*Label {
                     id:testLabel
                     text:"Food serving infomation"
-                }
+                }*/
 
-UbuntuShape{
+                ListItem.ItemSelector {
+                    id:group
+                    text: i18n.tr("Food Group Serving")
+                    expanded: true
+                    multiSelection: true
+                    width:parent.width
+                    selectedIndex: -1
+                    model: [i18n.tr("Protein"),
+                            i18n.tr("Dairy"),
+                            i18n.tr("Vegetables"),
+                            i18n.tr("Furits"),
+                            i18n.tr("Grains"),
+                            i18n.tr("Sweets")]
+                    onSelectedIndexChanged: console.log(group.selectedIndex)
+                }
+/*UbuntuShape{
     width:parent.width
     height:optionCal.height
     clip:true
@@ -362,24 +344,10 @@ UbuntuShape{
                             }
         }
 
-}
+}*/
                 }//end of column
         }
         }//end of page
-
     }//end of pagestack
 
-        /*Panel {
-                id: panel
-                anchors {
-                    bottom: parent.bottom
-                }
-                width: parent.width
-                height: units.gu(49.5)
-                Rectangle {
-                    color:"#e8e4e9"
-                    anchors.fill:parent
-                    GridComponent{}
-                }
-            }*/
 }
