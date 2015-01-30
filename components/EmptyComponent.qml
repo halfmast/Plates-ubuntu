@@ -15,7 +15,7 @@ Item{
         anchors{
             centerIn: parent;
         }
-        spacing:units.gu(3)
+        spacing:units.gu(1)
 
         Image{
             id:emptyImg

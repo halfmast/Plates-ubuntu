@@ -11,7 +11,7 @@ Component {
 
         TextField {
             id:setGoal
-            placeholderText:"Insert Target goal"
+            placeholderText:total.contents.set + " calories"//"Insert Target goal"
             inputMethodHints: Qt.ImhDigitsOnly
         }
 

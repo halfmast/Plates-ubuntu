@@ -38,7 +38,7 @@ Rectangle {
                     anchors.centerIn: parent
                     height:units.gu(5)
                     width:height
-                    onClicked: today_doc.contents = {today: 25};//PopupUtils.open(settings)
+                    onClicked: PopupUtils.open(settings)
                 }
             }
 
@@ -60,7 +60,7 @@ Rectangle {
                     verticalCenter: parent.verticalCenter
                 }
                 //changes add icon to green during empty state
-                source: numbers.contents.cot < 1? Qt.resolvedUrl("../graphics/emptyadd.svg"): Qt.resolvedUrl("../graphics/add.svg");
+                source: total.contents.final < 1? Qt.resolvedUrl("../graphics/emptyadd.svg"): Qt.resolvedUrl("../graphics/add.svg");
                 MouseArea {
                     anchors.centerIn: parent
                     height:units.gu(5)
