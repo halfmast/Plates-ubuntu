@@ -30,7 +30,7 @@ Item{
             id:emptyText
             fontSize:"x-large"
             font.weight: Font.Light;
-            text:"Don't forget to eat?"
+            text:"Don't forget to eat"
             anchors.horizontalCenter: parent.horizontalCenter;
         }
         Label{

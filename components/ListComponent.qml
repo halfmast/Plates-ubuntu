@@ -17,7 +17,6 @@ Column {
         delegate: ListItem.Empty {
             removable: true
             onItemRemoved: serve.deleteItem(modelData.foodName, modelData.calorieCount)
-
             confirmRemoval: true
             showDivider: false
             Rectangle{

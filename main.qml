@@ -65,6 +65,20 @@ MainView {
                     "players": []
                 }
             }
+            //--- favorite food database ---//
+            U1db.Database {
+                id: favoriteDB
+                path: "favoriteDB.u1db"
+            }
+            U1db.Document {
+                docId: "favoriteInfo"
+                id: favoriteInfo
+                database: favoriteDB
+                create: true
+                defaults: {
+                    "favorite": []
+                }
+            }
 
             //--- food list functions ---//
 
@@ -76,6 +90,21 @@ MainView {
                 if (tempContents.players.indexOf(playerObject) != -1) throw "Already exists";
                 tempContents.players.push(playerObject);
                 playerInfo.contents = tempContents;
+                }
+                function storeFavorite(playerObject) {
+                var tempContents = {};
+                   tempContents = favoriteInfo.contents;
+                if (tempContents.favorite.indexOf(playerObject) != -1) throw "Already exists";
+                tempContents.favorite.push(playerObject);
+                favoriteInfo.contents = tempContents;
+                }
+
+                function deleteFavorite(player,calorie) {
+                    var tempContents = {};
+                    tempContents = favoriteInfo.contents;
+                    var index = tempContents.favorite.indexOf(player);
+                    tempContents.favorite.splice(0, 1);
+                    favoriteInfo.contents = tempContents;
                 }
 
                 function deleteItem(player,calorie) {
@@ -152,11 +181,6 @@ MainView {
                      }
                          }*/
 
-
-
-
-
-
                 ListComponent {
                     id:listObject
                     height:parent.height
@@ -173,181 +197,9 @@ MainView {
                 }*/
         }
 
-        Page {
+        SettingsComponent{
             id:entry
-            visible: false
-            title:"New Item"
-            head.backAction: Action {
-                    iconName: "close"
-                    onTriggered: {
-                        stack.pop(home)
-                    }
-                }
-            head.actions: Action{
-                        iconName: "ok"
-                        text: i18n.tr("Save")
-                        onTriggered: {
-                            //liststuff.input = amount.text; liststuff.add = liststuff.input + liststuff.add;
-                            //first saves text in u1db documents
-                            total.contents = {set: total.contents.set, final: total.contents.final + parseInt(amount.text)};
-                            serve.storePlayer({"foodName":name.text, "calorieCount":amount.text});
-                            //check for empty state button
-                            serve.emptyState()
-                            stack.pop(home)
-                            console.log(total.contents.final)
-                        }
-
-
-            }
-                        Flickable{
-                            width:parent.width
-                            height:parent.height
-                            contentHeight: parent.height+units.gu(6)
-                            contentWidth: parent.width
-                            clip:true
-            Column {
-                spacing: units.gu(2)
-                anchors {
-                    margins: units.gu(2)
-                    fill: parent
-                }
-                Label {
-                    text:"Name of food"
-                }
-                TextField {
-                    id:name
-                    width:parent.width
-                    placeholderText: "muffin"
-                }
-                Label {
-                    text:"Calories"
-                }
-                TextField {
-                    id:amount
-                    width:parent.width
-                    placeholderText: "426"
-                    inputMethodHints: Qt.ImhDigitsOnly
-                }
-                /*Label {
-                    id:testLabel
-                    text:"Food serving infomation"
-                }*/
-
-                ListItem.ItemSelector {
-                    id:group
-                    text: i18n.tr("Food Group Serving")
-                    expanded: true
-                    multiSelection: true
-                    width:parent.width
-                    selectedIndex: -1
-                    model: [i18n.tr("Protein"),
-                            i18n.tr("Dairy"),
-                            i18n.tr("Vegetables"),
-                            i18n.tr("Furits"),
-                            i18n.tr("Grains"),
-                            i18n.tr("Sweets")]
-                    onSelectedIndexChanged: console.log(group.selectedIndex)
-                }
-/*UbuntuShape{
-    width:parent.width
-    height:optionCal.height
-    clip:true
-        Column{
-            id:optionCal
-            width:parent.width
-            height:units.gu(37.2)
-            spacing:units.gu(0)
-                ListItem.Base {
-                                Label {
-                                    text: i18n.tr("Protein")
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CheckBox {
-                                    id: proteinSwitch
-                                    anchors {
-                                        right: parent.right
-                                        verticalCenter: parent.verticalCenter
-                                    }
-                                    checked: false
-                                }
-                            }
-                ListItem.Base {
-                                Label {
-                                    text: i18n.tr("Dairy")
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CheckBox {
-                                    id: dairySwitch
-                                    anchors {
-                                        right: parent.right
-                                        verticalCenter: parent.verticalCenter
-                                    }
-                                    checked: false
-                                }
-                            }
-                ListItem.Base {
-                                Label {
-                                    text: i18n.tr("Vegetables")
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CheckBox {
-                                    id: vegSwitch
-                                    anchors {
-                                        right: parent.right
-                                        verticalCenter: parent.verticalCenter
-                                    }
-                                    checked: false
-                                }
-                            }
-                ListItem.Base {
-                                Label {
-                                    text: i18n.tr("Fruits")
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CheckBox {
-                                    id: fruitsSwitch
-                                    anchors {
-                                        right: parent.right
-                                        verticalCenter: parent.verticalCenter
-                                    }
-                                    checked: false
-                                }
-                            }
-                ListItem.Base {
-                                Label {
-                                    text: i18n.tr("Sweets")
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CheckBox {
-                                    id: sweetSwitch
-                                    anchors {
-                                        right: parent.right
-                                        verticalCenter: parent.verticalCenter
-                                    }
-                                    checked: false
-                                }
-                            }
-                ListItem.Base {
-                                Label {
-                                    text: i18n.tr("Grains")
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                                CheckBox {
-                                    id: grainSwitch
-                                    anchors {
-                                        right: parent.right
-                                        verticalCenter: parent.verticalCenter
-                                    }
-                                    checked: false
-                                }
-                                showDivider: false
-                            }
         }
-
-}*/
-                }//end of column
-        }
-        }//end of page
     }//end of pagestack
 
 }

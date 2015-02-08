@@ -25,20 +25,18 @@ Rectangle {
             height:diyTitle.height // set in main.qml
             width:parent.width
 
-            Image {// gear icon on left
+            Icon{
                 id:settingButton
+                name:"settings"
+                color:"white"
+                width: height
                 height:diyHeader.height/1.3
-                width:height
-                anchors{
-                    left:parent.left
-                    verticalCenter: parent.verticalCenter
-                }
-                source: Qt.resolvedUrl("../graphics/settings.svg")
+                anchors{left:parent.left; verticalCenter: parent.verticalCenter}
                 MouseArea {
                     anchors.centerIn: parent
                     height:units.gu(5)
                     width:height
-                    onClicked: PopupUtils.open(settings)
+                    onClicked: total.contents = {set: total.contents.set, final: 0};//PopupUtils.open(settings)
                 }
             }
 
@@ -50,17 +48,13 @@ Rectangle {
                 text: "Calories"
                 color:"white"
             }
-
-            Image {// add button on right
+            Icon{
                 id:addButton
+                name:"add"
+                color:total.contents.final < 1? "#73B36D": "white";
+                width: height
                 height:diyHeader.height/1.3
-                width:height
-                anchors{
-                    right:parent.right
-                    verticalCenter: parent.verticalCenter
-                }
-                //changes add icon to green during empty state
-                source: total.contents.final < 1? Qt.resolvedUrl("../graphics/emptyadd.svg"): Qt.resolvedUrl("../graphics/add.svg");
+                anchors{right:parent.right; verticalCenter: parent.verticalCenter}
                 MouseArea {
                     anchors.centerIn: parent
                     height:units.gu(5)
@@ -88,45 +82,31 @@ Rectangle {
             //custom progress bar taken from the original music core app
             Item {
                 //Item is here to stop column from spitting error about anchors in progress bar
-                width:parent.width - units.gu(1.5)
+                width:parent.width
                 height:units.gu(1.3)
                 anchors.horizontalCenter: parent.horizontalCenter
-                Rectangle {
-                    id: toolbarFullProgressBarContainer
-                    objectName: "progressBarShape"
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: "transparent"
-                    width:parent.width
-                    height:units.gu(1.3)
-                        //darker background for progressbar
-                        Rectangle {
-                            id: toolbarFullProgressBackground
-                            anchors.verticalCenter: parent.verticalCenter;
-                            color:"#242629";
-                            height: parent.height;
-                            radius: units.gu(0.5)
-                            width: parent.width;
-                        }
-                        // The green fill of the progress bar
-                        Rectangle {
-                            id: toolbarFullProgressTrough
-                            anchors.verticalCenter: parent.verticalCenter;
-                            antialiasing: true
-                            color: "#73B36D";
-                            height: parent.height;
-                            radius: units.gu(0.5)
-                            Behavior on width { NumberAnimation { easing.type: Easing.OutBack; duration: 1300} }
-                            width: if (total.contents.final < total.contents.set) { ((total.contents.final / total.contents.set)*parent.width)}
-                                    else{parent.width}
-                        }
-                        /* Border at the bottom */
-                        Rectangle {
-                            anchors.bottom: parent.bottom
-                            width:parent.width
-                            color: "white"
-                            height: units.gu(0.1)
-                            opacity: 0.1
-                        }
+
+                //darker background for progressbar
+                    Rectangle {
+                        id: toolbarFullProgressBackground
+                        anchors.verticalCenter: parent.verticalCenter;
+                        color:"#242629";
+                        height: units.gu(1.5)
+                        radius: units.gu(0.8)
+                        width: parent.width;
+
+                    // The green fill of the progress bar
+                    Rectangle {
+                        id: toolbarFullProgressTrough
+                        anchors.verticalCenter: parent.verticalCenter;
+                        antialiasing: true
+                        color: "#73B36D";
+                        height: parent.height;
+                        radius: units.gu(0.8)
+                        Behavior on width { NumberAnimation { easing.type: Easing.OutBack; duration: 1300} }
+                        width: if (total.contents.final < total.contents.set) { ((total.contents.final / total.contents.set)*parent.width)}
+                                else{parent.width}
+                    }
                 }
             }//end of custom progress bar
 
@@ -138,7 +118,7 @@ Rectangle {
                         horizontalCenter: parent.horizontalCenter
                     }
                     Item {// container for remaining calorie amount
-                        width:units.gu(10)
+                        width:units.gu(11)
                         height:units.gu(5)
                         Label {
                             id:rLabel
@@ -158,12 +138,13 @@ Rectangle {
                         }
                     }
                     Item { // container for comsumed calorie count
-                        width:units.gu(10)
+                        width:units.gu(11)
                         height:units.gu(5)
                         Label {
                             id:cLabel
                             anchors.horizontalCenter: parent.horizontalCenter
                             fontSize:"large"
+
                             text:total.contents.final
                         }
                         Label {
@@ -177,12 +158,13 @@ Rectangle {
                         }
                     }
                     Item { // container for daily limit
-                        width:units.gu(10)
+                        width:units.gu(11)
                         height:units.gu(5)
                         Label {
                             id:dLabel
                             anchors.horizontalCenter: parent.horizontalCenter
                             fontSize:"large"
+
                             text: total.contents.set
                             color:"#73B36D"
                         }

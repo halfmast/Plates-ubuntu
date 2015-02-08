@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.1.1, 2015-01-29T00:19:38. -->
+<!-- Written by QtCreator 3.1.1, 2015-02-07T18:05:19. -->
 <qtcreator>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -59,7 +59,7 @@
    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">{1e535e09-e70e-437d-aea7-23a5612ffa9e}</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
-   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
+   <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">2</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/kevin/Documents/Development/ubuntu/build-Plates-Desktop-default</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
@@ -229,7 +229,7 @@
      <value type="int">13</value>
      <value type="int">14</value>
     </valuelist>
-    <value type="int" key="PE.EnvironmentAspect.Base">-1</value>
+    <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Plates</value>
@@ -290,11 +290,11 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">UbuntuProjectManager.UploadStep</value>
       <valuelist type="QVariantList" key="Qt4ProjectManager.MaemoRunConfiguration.LastDeployedFiles">
-       <value type="QString">/usr/share/qtcreator/ubuntu/scripts/qtc_device_applaunch.py</value>
-       <value type="QString">/home/kevin/Documents/Development/ubuntu/build-Plates-Ubuntu_Device_GCC_armhf_ubuntu_sdk_14_10_utopic-default/com.ubuntu.developer.kevinfeyder.plates_0.3_all.click</value>
-       <value type="QString">/home/kevin/Documents/Development/ubuntu/build-Plates-Ubuntu_Device_GCC_armhf_ubuntu_sdk_14_10_utopic-default/com.ubuntu.developer.kevinfeyder.plates_0.3.1_all.click</value>
        <value type="QString">/home/kevin/Documents/Development/ubuntu/build-Plates-Ubuntu_Device_GCC_armhf_ubuntu_sdk_14_10_utopic-default/com.ubuntu.developer.kevinfeyder.plates_0.3.2_all.click</value>
        <value type="QString">/home/kevin/Documents/Development/ubuntu/build-Plates-Ubuntu_Device_GCC_armhf_ubuntu_sdk_14_10_utopic-default/com.ubuntu.developer.kevinfeyder.plates_0.1_all.click</value>
+       <value type="QString">/home/kevin/Documents/Development/ubuntu/build-Plates-Ubuntu_Device_GCC_armhf_ubuntu_sdk_14_10_utopic-default/com.ubuntu.developer.kevinfeyder.plates_0.3.1_all.click</value>
+       <value type="QString">/usr/share/qtcreator/ubuntu/scripts/qtc_device_applaunch.py</value>
+       <value type="QString">/home/kevin/Documents/Development/ubuntu/build-Plates-Ubuntu_Device_GCC_armhf_ubuntu_sdk_14_10_utopic-default/com.ubuntu.developer.kevinfeyder.plates_0.3_all.click</value>
        <value type="QString">/home/kevin/Documents/Development/ubuntu/build-Plates-Ubuntu_Device_GCC_armhf_ubuntu_sdk_14_10_utopic-default/com.ubuntu.developer.kevinfeyder.plates_0.2_all.click</value>
       </valuelist>
       <valuelist type="QVariantList" key="Qt4ProjectManager.MaemoRunConfiguration.LastDeployedHosts">
@@ -322,11 +322,11 @@
        <value type="QString">/var/lib/schroot/chroots/click-ubuntu-sdk-14.10-armhf</value>
       </valuelist>
       <valuelist type="QVariantList" key="Qt4ProjectManager.MaemoRunConfiguration.LastDeployedTimes">
-       <value type="QDateTime">2015-01-28T23:01:09</value>
-       <value type="QDateTime">2014-10-22T21:17:50</value>
-       <value type="QDateTime">2014-10-22T21:36:49</value>
-       <value type="QDateTime">2015-01-28T23:01:09</value>
+       <value type="QDateTime">2015-02-01T00:38:57</value>
        <value type="QDateTime">2014-09-09T19:23:27</value>
+       <value type="QDateTime">2014-10-22T21:36:49</value>
+       <value type="QDateTime">2015-02-01T00:38:57</value>
+       <value type="QDateTime">2014-10-22T21:17:50</value>
        <value type="QDateTime">2014-09-19T17:37:23</value>
       </valuelist>
      </valuemap>
