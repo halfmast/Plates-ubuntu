@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Ubuntu.Components 1.1
+import Ubuntu.Components.ListItems 1.0 as ListItem
 import U1db 1.0 as U1db
 import "../components/"
 
@@ -8,197 +9,52 @@ Rectangle{
     anchors.fill: parent
     color: "#e8e4e9"
 
+    Flickable{
+        width:parent.width
+        height:parent.height//-units.gu(10)
+        contentHeight: parent.height+units.gu(10)
+        contentWidth: parent.width
+        clip:true;
+    Column {
+        height:parent.height
+        width:parent.width
+        spacing:units.gu(2)
+        clip:true
+        anchors.top:head.bottom
+        /*ListItem.SingleValue{
+            text:"Food Group servings"
+            value:"hi"}*/
 
-Grid {
-    width:parent.width//-units.gu(.6)
-    anchors{
-        margins:units.gu(1)
-        //horizontalCenter: parent.horizontalCenter
-        //verticalCenter: parent.verticalCenter
-        fill: parent
-    }
-    columns: 2
-    columnSpacing: units.gu(.185)
-    rows:3
-    rowSpacing: units.gu(.185)
-    //first row protein and dairy
-
-    Rectangle {
-        height:parent.height*.33//units.gu(16)
-        width:(parent.width*.5)
-        color:"#f1f1f1"
-        Column{
-            anchors{horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter}
-            spacing:units.gu(1.3)
-            Label{
-                id:meatLorem
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                color: "#73B36D"
-                text: (details.contents.meat === 0 ? "0%" : Math.round((details.contents.meat/numbers.contents.cot)*100)+"%")//"0%"
-            }
-            Label{
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                font.weight: Font.Light;
-                text:"Protein"}
+        ListItem.Standard {
+            id:title
+            text: "Food Group Serving Infomation"
+            //onClicked:  bottomEdge.state = "collapsed"
         }
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "white"
-            height: units.gu(0.1)
-            opacity: 0.1
+        ListItem.SingleValue {
+            text: i18n.tr("Protein")//parseInt(amount.text)
+            value: total.contents.pro === 0 ? "0%" : (Math.round((parseInt(total.contents.pro)/parseInt(playerInfo.contents.players.length))*100))+"%";
+        }
+        ListItem.SingleValue {
+            text: i18n.tr("Dairy")
+            value: total.contents.dai === 0 ? "0%" : Math.round((total.contents.dai/playerInfo.contents.players.length)*100)+"%";
+            onClicked: console.log(total.contents.dai);
+        }
+        ListItem.SingleValue {
+            text: i18n.tr("Vegetables")
+            value: total.contents.veg === 0 ? "0%" : Math.round((total.contents.veg/playerInfo.contents.players.length)*100)+"%";
+        }
+        ListItem.SingleValue {
+            text: i18n.tr("Fruits")
+            value:total.contents.fru === 0 ? "0%" : Math.round((total.contents.fru/playerInfo.contents.players.length)*100)+"%";
+        }
+        ListItem.SingleValue {
+            text: i18n.tr("grains")
+            value:total.contents.gra === 0 ? "0%" : Math.round((total.contents.gra/playerInfo.contents.players.length)*100)+"%";
+        }
+        ListItem.SingleValue {
+            text: i18n.tr("sweets")
+            value:total.contents.swe === 0 ? "0%" : Math.round((total.contents.swe/playerInfo.contents.players.length)*100)+"%";
+        }
         }
     }
-    Rectangle {
-        height:parent.height*.33//units.gu(16)
-        width:(parent.width*.5)-units.gu(.3)
-        color:"#f1f1f1"
-        Column{
-            anchors{horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter}
-            spacing:units.gu(1.3)
-            Label{
-                id:dairyLorem
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                color: "#73B36D"
-                //font.weight: Font.Light;
-                text:(details.contents.dairy === 0 ? "0%" : Math.round((details.contents.dairy/numbers.contents.cot)*100)+"%")//"0%"
-            }
-            Label{
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                font.weight: Font.Light;
-                text:"Dairy"}
-        }
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "white"
-            height: units.gu(0.1)
-            opacity: 0.1
-        }
-    }
-    //middle row in grid Fruits and vegetables
-    Rectangle {
-        height:parent.height*.33//units.gu(16)
-        width:(parent.width*.5)
-        color:"#f1f1f1"
-        Column{
-            anchors{horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter}
-            spacing:units.gu(1.3)
-            Label{
-                id:fruitsLorem
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                color: "#73B36D"
-                text:(details.contents.fruits === 0 ? "0%" : Math.round((details.contents.fruits/numbers.contents.cot)*100)+"%")
-            }
-            Label{
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                font.weight: Font.Light;
-                text:"Fruits"}
-        }
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "white"
-            height: units.gu(0.1)
-            opacity: 0.1
-        }
-    }
-    Rectangle {
-        height:parent.height*.33//units.gu(16)
-        width:(parent.width*.5)-units.gu(.3)
-        color:"#f1f1f1"
-        Column{
-            anchors{horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter}
-            spacing:units.gu(1.3)
-            Label{
-                id:vegLorem
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                color: "#73B36D"
-                text:(details.contents.veg === 0 ? "0%" : Math.round((details.contents.veg/numbers.contents.cot)*100)+"%")
-            }
-            Label{
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                font.weight: Font.Light;
-                text:"Vegetables"}
-        }
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "white"
-            height: units.gu(0.1)
-            opacity: 0.1
-        }
-    }
-    //Last row of grid Grains and sweets
-    Rectangle {
-        height:parent.height*.33//units.gu(16)
-        width:(parent.width*.5)
-        color:"#f1f1f1"
-        Column{
-            anchors{horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter}
-            spacing:units.gu(1.3)
-            Label{
-                id:grainLorem
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                color: "#73B36D"
-                text:(details.contents.grains === 0 ? "0%" : Math.round((details.contents.grains/numbers.contents.cot)*100)+"%")
-            }
-            Label{
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                font.weight: Font.Light;
-                text:"Grains"}
-        }
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "white"
-            height: units.gu(0.1)
-            opacity: 0.1
-        }
-    }
-    Rectangle {
-        height:parent.height*.33//units.gu(16)
-        width:(parent.width*.5)-units.gu(.2)
-        color:"#f1f1f1"
-        Column{
-            anchors{centerIn: parent}
-            spacing:units.gu(1.3)
-            Label{
-                id:sweetLorem
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                color: "#73B36D"
-                text:(details.contents.sweet === 0 ? "0%" : Math.round((details.contents.sweet/numbers.contents.cot)*100)+"%")
-            }
-            Label{
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: units.gu(2.5)
-                font.weight: Font.Light;
-                text:"Sweets"}
-        }
-        Rectangle {
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "white"
-            height: units.gu(0.1)
-            opacity: 0.1
-        }
-    }
-}
 }

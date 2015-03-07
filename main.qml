@@ -3,6 +3,7 @@ import U1db 1.0 as U1db
 import Ubuntu.Components 1.1
 import Ubuntu.Components.ListItems 1.0 as ListItem
 import Ubuntu.Components.Popups 1.0
+import UserMetrics 0.1
 import "components"
 
 MainView {
@@ -13,12 +14,12 @@ MainView {
     height: units.gu(75)
     backgroundColor: "#f4f4f3"
 
-    /*Item { id:start;
+    Item { id:start;
         function startupFunction(){
             check.day()
-            check.emptyState()
+            serve.emptyState()
          }
-         Component.onCompleted: startupFunction()}*/
+         Component.onCompleted: startupFunction()}
 
     PageStack {
         id: stack
@@ -48,7 +49,7 @@ MainView {
                 database: food
                 docId: "total_save"
                 create: true
-                defaults: { "set": 2500, "final": 0 }
+                defaults: { "set": 2500, "final": 0,"pro":0, "dai":0,"fru":0,"veg":0,"gra":0,"swe":0}
             }
 
             //--- food list database ---//
@@ -80,6 +81,15 @@ MainView {
                 }
             }
 
+            //---- welcome screen ---- //
+            Metric {
+            id: foodMetric
+            name: "Plates-metrics"
+            format: total.contents.final + " calories consumed today"
+            emptyFormat: "No calories consumed today"
+            domain: "com.ubuntu.developer.KevinFeyder.Plates"
+            }
+
             //--- food list functions ---//
 
             Item{
@@ -103,22 +113,30 @@ MainView {
                     var tempContents = {};
                     tempContents = favoriteInfo.contents;
                     var index = tempContents.favorite.indexOf(player);
-                    tempContents.favorite.splice(0, 1);
+                    tempContents.favorite.splice(favoriteInfo.contents.favorite.indexOf(player), 1);
                     favoriteInfo.contents = tempContents;
                 }
 
-                function deleteItem(player,calorie) {
-                    console.log("final:" + total.contents.final)
-                    console.log("calorie:" + calorie)
-                    console.log("math:" + (total.contents.final - parseInt(calorie)))
+                function deleteItem() {
+                    var tempContents = {};
+                    tempContents = playerInfo.contents;
+                    var index = tempContents.players.indexOf();
+                    tempContents.players.splice(0, playerInfo.contents.players.length);
+                    total.contents = {"set": total.contents.set, "final": 0,"pro":0, "dai":0,"fru":0,"veg":0,"gra":0,"swe":0};
+                    foodMetric.update(0);
+                    playerInfo.contents = tempContents;
+                }
+
+                /*function deleteItem(player,calorie, protein, dairy, fruits, vegetables, grains, sweets) {
                     var tempContents = {};
                     tempContents = playerInfo.contents;
                     var index = tempContents.players.indexOf(player);
-                    total.contents = {set: total.contents.set, final: total.contents.final - parseInt(calorie) };
-                    if(total.contents.final < 0){total.contents = {set: total.contents.set, final: 0 }};
-                    tempContents.players.splice(0, 1);
+                    total.contents = {set: total.contents.set, final: total.contents.final - parseInt(calorie),"pro":total.contents.pro - protein,"dai":total.contents.dai - dairy,
+                            "fru":total.contents.fru - fruits,"veg":total.contents.veg - vegetables,"gra":total.contents.gra - grains,"swe":total.contents.swe - sweets };
+                    if(total.contents.final < 0){total.contents = {set: total.contents.set, final: 0}};
+                    tempContents.players.splice(playerInfo.contents.players.indexOf(player), 1);
                     playerInfo.contents = tempContents;
-                }
+                }*/
 
                 function emptyState(){
                     if(total.contents.final < 1){empty.visible = true}
@@ -133,7 +151,6 @@ MainView {
             }
                     SetComponent {
                         //settings dialog popup
-                        //check LoadingComponent file
                         id:settings
                     }
 
@@ -147,14 +164,14 @@ MainView {
                         }
                     }
 
-            /*Item {//timer that runs check.day functions
+            Item {//timer that runs check.day functions
                 Timer {
                     interval: 500; running: true; repeat: true
-                    onTriggered:{check.day();}
+                    onTriggered:check.day();
                 }
-            }*/
+            }
 
-                 /*Item{
+                 Item{
                  id: check
                  //get date then
                  //check date and resets app if date doesn't match
@@ -170,16 +187,12 @@ MainView {
                          //if day doesn't match
                          //gets new day, then set document to today
                          today_doc.contents = {today: n};
-                         liststuff.deleted( numbers.contents.cot );
-                         liststuff.add = 0;
                          //reset all documents for the next day
-                         total.contents = {set: total.contents.set, final: 0};
-                         numbers.contents = {cot: 0, last: 0};
-                         details.contents = {meat: 0, dairy: 0, fruits: 0, veg: 0, grains: 0, sweet: 0}
-                         meatLorem.text="0%";dairyLorem.text="0%";fruitsLorem.text="0%";vegLorem.text="0%";grainLorem.text="0%";sweetLorem.text="0%";
-                         check.emptyState()
+                         serve.deleteItem();
+                         serve.emptyState()
                      }
-                         }*/
+                         }
+                 }
 
                 ListComponent {
                     id:listObject
@@ -188,17 +201,20 @@ MainView {
                     anchors.top:head.bottom
                 }
 
-                /*PageWithBottomEdge{
+                PageWithBottomEdge{
                     bottomEdgeTitle: i18n.tr("Nutrition Details")
                     height:parent.height-units.gu(19)
                     //bottomEdgeEnabled: (layouts.width < units.gu(60)) ? true : false;
                     z:3
                     bottomEdgePageComponent: GridComponent{anchors.fill:parent;anchors.centerIn: parent}
-                }*/
+                }
         }
 
         SettingsComponent{
             id:entry
+        }
+        ManageComponent{
+            id:set
         }
     }//end of pagestack
 

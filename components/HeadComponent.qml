@@ -5,6 +5,7 @@ import Ubuntu.Components.Popups 1.0
 
 
 
+
 Rectangle {
     id:divider
     color: "#2d3234"
@@ -36,7 +37,7 @@ Rectangle {
                     anchors.centerIn: parent
                     height:units.gu(5)
                     width:height
-                    onClicked: total.contents = {set: total.contents.set, final: 0};//PopupUtils.open(settings)
+                    onClicked: stack.push(set)
                 }
             }
 
@@ -47,6 +48,12 @@ Rectangle {
                 anchors.centerIn: parent;
                 text: "Calories"
                 color:"white"
+                /*MouseArea {
+                    anchors.centerIn: parent
+                    height:units.gu(5)
+                    width:height
+                    onClicked: today_doc.contents = {today: 1};//serve.deleteItem()
+                }*/
             }
             Icon{
                 id:addButton
@@ -182,9 +189,4 @@ Rectangle {
             }
         }
     }
-    //divider to bring back ubuntu header look
-    ListItem.Divider {
-        width:parent.width
-        anchors.bottom:divider.bottom
-        }
 }

@@ -15,17 +15,18 @@ Column {
         width:parent.width
         height:parent.height
         delegate: ListItem.Empty {
-            removable: true
-            onItemRemoved: serve.deleteItem(modelData.foodName, modelData.calorieCount)
+            height:units.gu(7)
+            removable: false
+            onItemRemoved: serve.deleteItem(modelData.foodName, modelData.calorieCount, modelData.protein, modelData.dairy, modelData.fruits, modelData.vegetables, modelData.grains, modelData.sweets)
             confirmRemoval: true
             showDivider: false
             Rectangle{
             id: backgroundRect
             z:-1;
             width: parent.width
-            height: units.gu(7)
+            height: parent.height
             anchors.horizontalCenter: parent.horizontalCenter
-            color: index % 2 == 0 ? "transparent" : "#deebe4"
+            color: index % 2 == 0 ? "transparent" : "#e6e6e6"
                 Label {
                     text:modelData.foodName;
                     fontSize: "large";

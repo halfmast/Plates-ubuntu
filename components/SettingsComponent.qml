@@ -10,15 +10,15 @@ Page {
     head.backAction: Action {
         iconName: "close"
         onTriggered: {
+            amount.text = ""; name.text = ""; foodStar.name = "non-starred"
             stack.pop(home)
         }
     }
     head.actions:[
         Action{
-            iconName:"contextual-menu"
+            iconName:"view-list-symbolic"
             text:"favorite"
             onTriggered: {
-                console.log("add favorite list")
                 PopupUtils.open(favoriteItem)
             }
         },
@@ -26,10 +26,27 @@ Page {
             iconName: "ok"
             text: i18n.tr("Save")
             onTriggered: {
-                if( foodStar.color === "#73B36D" && foodStar.name === "bookmark-new"){
-                    serve.storeFavorite({"foodName":name.text, "calorieCount":amount.text});
-                    console.log("food is served")
-                }else{
+                if( foodStar.color !== "#73B36D" && foodStar.name === "bookmark-new"){//saving
+                    //saves favorite food item to favorite db
+                    serve.storeFavorite({"foodName":name.text, "calorieCount":amount.text,"pro":protein.value, "dai":dairy.value,"fru":fruits.value,
+                        "veg":vegetables.value,"gra":grains.value,"swe":sweets.value});
+                    //sets today info with calorir and good groups. gets deleted at the end of day
+                    total.contents = {set: total.contents.set, final: total.contents.final + parseInt(amount.text),"pro":total.contents.pro + protein.value,
+                        "dai":total.contents.dai + dairy.value,"fru":total.contents.fru + fruits.value,"veg":total.contents.veg + vegetables.value,
+                        "gra":total.contents.gra + grains.value,"swe":total.contents.swe + sweets.value};
+                        foodMetric.increment(25);
+                    //save food item to appear of the calorie list. info saved for swipe to delete feature yet to land
+                    serve.storePlayer({"foodName":name.text, "calorieCount":amount.text,"pro":protein.value, "dai":dairy.value,"fru":fruits.value,
+                        "veg":vegetables.value,"gra":grains.value,"swe":sweets.value});
+                    //reset switches on save
+                        amount.text = ""; name.text = ""; foodStar.name = "non-starred"
+                        protein.value = false; dairy.value = false; fruits.value = false; vegetables.value = false; sweets.value = false; grains.value = false;
+                        p.checked = false; d.checked = false; f.checked = false; v.checked = false; s.checked = false; g.checked = false;
+                        expandingItem1.expanded = false;
+                    //check for empty state button
+                    serve.emptyState()
+                    stack.pop(home)
+                }else{ //error message
                     if(name.text === "" ){
                         warning.text = "Food entry must have a name";
                         warningBox.height = units.gu(5); warningBox.opacity = 1;
@@ -37,12 +54,22 @@ Page {
                         warning.text = "Calorie amount must be zero or greater";
                         warningBox.height = units.gu(5); warningBox.opacity = 1;
                     }else{
-
-                    total.contents = {set: total.contents.set, final: total.contents.final + parseInt(amount.text)};
-                    serve.storePlayer({"foodName":name.text, "calorieCount":amount.text});
-                        //check for empty state button
-                        serve.emptyState()
-                        stack.pop(home)
+                    //sets today info with calorie and good groups. gets deleted at the end of day
+                    total.contents = {set: total.contents.set, final: total.contents.final + parseInt(amount.text),"pro":total.contents.pro + protein.value,"dai":total.contents.dai + dairy.value,
+                            "fru":total.contents.fru + fruits.value,"veg":total.contents.veg + vegetables.value,"gra":total.contents.gra + grains.value,"swe":total.contents.swe + sweets.value};
+                    serve.storePlayer({"foodName":name.text, "calorieCount":amount.text, "protein": protein.value, "dairy": dairy.value, "vegetables": vegetables.value, "fruits": fruits.value, "grains": grains.value, "sweets": sweets.value});
+                        foodMetric.increment(25);
+                    //reset switches on save
+                        amount.text = ""; name.text = ""; foodStar.name = "non-starred"
+                        protein.value = false; dairy.value = false; fruits.value = false; vegetables.value = false; sweets.value = false; grains.value = false;
+                        p.checked = false; d.checked = false; f.checked = false; v.checked = false; s.checked = false; g.checked = false;
+                        expandingItem1.expanded = false;
+                    //clears warnings on save
+                        warningBox.opacity = 0;
+                        warningBox.height = 0
+                    //check for empty state button
+                    serve.emptyState()
+                    stack.pop(home)
                 }
             }
         }
@@ -50,8 +77,8 @@ Page {
     ]
         Flickable{
             width:parent.width
-            height:parent.height-units.gu(5)
-            contentHeight: parent.height//+units.gu(6)
+            height:parent.height//-units.gu(10)
+            contentHeight: parent.height+units.gu(10)
             contentWidth: parent.width
             clip:true
             Column {
@@ -106,23 +133,20 @@ Page {
                         name:"non-starred"
                         width: height
                         height: foodName.height
+                        color:"#5d5d5d"
                         anchors{right:parent.right; verticalCenter: parent.verticalCenter}
                         MouseArea {
                             anchors.centerIn: parent
                             height:units.gu(5)
                             width:height
                             onClicked: {
-                                if(foodStar.color === "#73B36D" && foodStar.name === "bookmark-new") {
-                                    foodStar.name  === "non-starred"? foodStar.name = "bookmark-new" : foodStar.name = "non-starred";
-                                }else{
+                                if(foodStar.name === "starred"){
                                     warning.text = "Go to the Settings to manage favorites"
                                     warningBox.opacity = 1;
                                     warningBox.height = units.gu(5);
+                                }else{
+                                    foodStar.name  === "non-starred"? foodStar.name = "bookmark-new" : foodStar.name = "non-starred";
                                 }
-
-                                //foodStar.name  === "non-starred"? foodStar.name = "bookmark-new" : foodStar.name = "non-starred";
-                                //console.log("starred")
-                                //add save food item data to database
                             }
                         }
                     }
@@ -131,6 +155,7 @@ Page {
                     id:name
                     width:parent.width
                     placeholderText: "Chocolate Donut"
+                    onTextChanged: foodStar.name = "non-starred";
                 }
                 Label {
                     text:"Calories"
@@ -140,6 +165,7 @@ Page {
                     width:parent.width
                     placeholderText: "290"
                     inputMethodHints: Qt.ImhDigitsOnly
+                    onTextChanged: foodStar.name = "non-starred";
                 }
 
                 ListItem.Expandable {
@@ -154,7 +180,6 @@ Page {
                     Column {
                         id: contentCol1
                         width:parent.width
-                        //anchors { left: parent.left; right: parent.right }
                         Item {
                             width: parent.width
                             height: expandingItem1.collapsedHeight
@@ -171,20 +196,87 @@ Page {
                                 anchors{right:parent.right; verticalCenter: parent.verticalCenter}
                             }
                         }
-                        ListItem.ItemSelector {
-                            id:group
-                            multiSelection: true
-                            width:parent.width
-                            selectedIndex: -1
-                            showDivider: false
-                            model: [i18n.tr("Protein"),
-                                    i18n.tr("Dairy"),
-                                    i18n.tr("Vegetables"),
-                                    i18n.tr("Furits"),
-                                    i18n.tr("Grains"),
-                                    i18n.tr("Sweets")]
-                            onSelectedIndexChanged: console.log(group.onCurrentIndexChanged)
-                        }
+
+                            ListItem.Standard {
+                                id:protein
+                                property int value: 0;
+                                text: i18n.tr("Protein")
+                                control: CheckBox {
+                                    id:p
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    onClicked: {
+                                        protein.value === 0 ? protein.value = 1: protein.value = 0;
+                                        foodStar.name = "non-starred";
+                                        console.log("protien:" + protein.value);
+                                    }
+                                }
+                            }
+                            ListItem.Standard {
+                                id:dairy
+                                property int value: 0;
+                                text: i18n.tr("Dairy")
+                                control: CheckBox {
+                                    id:d
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    onClicked: {
+                                        foodStar.name = "non-starred";
+                                        dairy.value === 0 ? dairy.value = 1 : dairy.value = 0;
+                                    }
+                                }
+                            }
+                            ListItem.Standard {
+                                id:vegetables
+                                property int value: 0;
+                                text: i18n.tr("Vegetables")
+                                control: CheckBox {
+                                    id:v
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    onClicked: {
+                                        foodStar.name = "non-starred";
+                                        vegetables.value === 0 ? vegetables.value = 1 : vegetables.value = 0;
+                                    }
+                                }
+                            }
+                            ListItem.Standard {
+                                id:fruits
+                                property int value: 0;
+                                text: i18n.tr("Fruits")
+                                control: CheckBox {
+                                    id:f
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    onClicked: {
+                                        foodStar.name = "non-starred";
+                                        fruits.value === 0 ? fruits.value = 1 : fruits.value = 0;
+                                    }
+                                }
+                            }
+                            ListItem.Standard {
+                                id:grains
+                                property int value: 0;
+                                text: i18n.tr("grains")
+                                control: CheckBox {
+                                    id:g
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    onClicked: {
+                                        foodStar.name = "non-starred";
+                                        grains.value === 0 ? grains.value = 1 : grains.value = 0; console.log(grains.value);
+                                    }
+                                }
+                            }
+                            ListItem.Standard {
+                                id:sweets
+                                property int value: 0;
+                                text: i18n.tr("sweets")
+                                control: CheckBox {
+                                    id:s
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    onClicked: {
+                                        foodStar.name = "non-starred";
+                                        sweets.value === 0 ? sweets.value = 1 : sweets.value = 0;
+                                    }
+                                }
+                            }
+
                     }
                 }//end of exapand list
 
